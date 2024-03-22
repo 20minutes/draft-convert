@@ -12,9 +12,15 @@ import getNestedBlockTags from './util/getNestedBlockTags'
 import defaultBlockHTML from './default/defaultBlockHTML'
 
 const defaultEntityToHTML = (entity, originalText) => originalText
+const defaultValidateHTML = (html) => true
 
 const convertToHTML =
-  ({ styleToHTML = {}, blockToHTML = {}, entityToHTML = defaultEntityToHTML }) =>
+  ({
+    styleToHTML = {},
+    blockToHTML = {},
+    entityToHTML = defaultEntityToHTML,
+    validateHTML = defaultValidateHTML,
+  }) =>
   (contentState) => {
     invariant(
       contentState !== null && contentState !== undefined,
@@ -99,7 +105,13 @@ const convertToHTML =
           }
         }
 
-        return closeNestTags + openNestTags + html
+        const finalHtml = closeNestTags + openNestTags + html
+
+        if (!validateHTML(finalHtml)) {
+          return ''
+        }
+
+        return finalHtml
       })
       .join('')
 
