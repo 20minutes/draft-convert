@@ -1099,4 +1099,40 @@ describe('convertToHTML', () => {
 
     expect(() => convertToHTML(contentState)).toThrowError(/missing HTML definition/)
   })
+
+  it('validate final HTML', () => {
+    const contentState = buildContentState(
+      [
+        {
+          type: 'unstyled',
+          text: 'test',
+          entityRanges: [
+            {
+              key: 0,
+              offset: 3,
+              length: 4,
+            },
+          ],
+        },
+      ],
+      {
+        0: {
+          type: 'LINK',
+          mutability: 'IMMUTABLE',
+        },
+      }
+    )
+
+    const result = convertToHTML({
+      entityToHTML: (entity, originalText) => {
+        if (entity.type === 'LINK') {
+          return `<a>${originalText}</a>`
+        }
+
+        return originalText
+      },
+      validateHTML: (html) => false,
+    })(contentState)
+    expect(result).toBe('')
+  })
 })
