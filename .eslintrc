@@ -1,13 +1,16 @@
 {
-  "extends": [
-    "hubspot",
-    "prettier"
-  ],
-  "rules":{
+  "extends": "@20minutes",
+  "rules": {
     "no-undefined": "off",
     "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
     "no-param-reassign": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-underscore-dangle": "off",
+    "jsx-a11y/heading-has-content": "off",
+    "jsx-a11y/anchor-has-content": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/alt-text": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "no-console": "off"
   }
 }
-  

@@ -1,141 +1,116 @@
-// import Immutable from 'immutable'; // eslint-disable-line no-unused-vars
-import invariant from 'invariant';
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import { convertToRaw } from 'draft-js';
+import invariant from 'invariant'
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
+import { convertToRaw } from 'draft-js'
+import encodeBlock from './encodeBlock'
+import blockEntities from './blockEntities'
+import blockInlineStyles from './blockInlineStyles'
+import accumulateFunction from './util/accumulateFunction'
+import blockTypeObjectFunction from './util/blockTypeObjectFunction'
+import getBlockTags from './util/getBlockTags'
+import getNestedBlockTags from './util/getNestedBlockTags'
+import defaultBlockHTML from './default/defaultBlockHTML'
 
-import encodeBlock from './encodeBlock';
-import blockEntities from './blockEntities';
-import blockInlineStyles from './blockInlineStyles';
+const defaultEntityToHTML = (entity, originalText) => originalText
 
-import accumulateFunction from './util/accumulateFunction';
-import blockTypeObjectFunction from './util/blockTypeObjectFunction';
-import getBlockTags from './util/getBlockTags';
-import getNestedBlockTags from './util/getNestedBlockTags';
+const convertToHTML =
+  ({ styleToHTML = {}, blockToHTML = {}, entityToHTML = defaultEntityToHTML }) =>
+  (contentState) => {
+    invariant(
+      contentState !== null && contentState !== undefined,
+      'Expected contentState to be non-null'
+    )
 
-import defaultBlockHTML from './default/defaultBlockHTML';
+    let getBlockHTML
+    if (blockToHTML.__isMiddleware === true) {
+      getBlockHTML = blockToHTML(blockTypeObjectFunction(defaultBlockHTML))
+    } else {
+      getBlockHTML = accumulateFunction(
+        blockTypeObjectFunction(blockToHTML),
+        blockTypeObjectFunction(defaultBlockHTML)
+      )
+    }
 
-const defaultEntityToHTML = (entity, originalText) => {
-  return originalText;
-};
+    const rawState = convertToRaw(contentState)
 
-const convertToHTML = ({
-  styleToHTML = {},
-  blockToHTML = {},
-  entityToHTML = defaultEntityToHTML,
-}) => contentState => {
-  invariant(
-    contentState !== null && contentState !== undefined,
-    'Expected contentState to be non-null'
-  );
+    let listStack = []
 
-  let getBlockHTML;
-  if (blockToHTML.__isMiddleware === true) {
-    getBlockHTML = blockToHTML(blockTypeObjectFunction(defaultBlockHTML));
-  } else {
-    getBlockHTML = accumulateFunction(
-      blockTypeObjectFunction(blockToHTML),
-      blockTypeObjectFunction(defaultBlockHTML)
-    );
-  }
+    let result = rawState.blocks
+      .map((block) => {
+        const { type, depth } = block
 
-  const rawState = convertToRaw(contentState);
+        let closeNestTags = ''
+        let openNestTags = ''
 
-  let listStack = [];
+        const blockHTMLResult = getBlockHTML(block)
+        if (!blockHTMLResult) {
+          throw new Error(
+            `convertToHTML: missing HTML definition for block with type ${block.type}`
+          )
+        }
 
-  let result = rawState.blocks
-    .map(block => {
-      const { type, depth } = block;
-
-      let closeNestTags = '';
-      let openNestTags = '';
-
-      const blockHTMLResult = getBlockHTML(block);
-      if (!blockHTMLResult) {
-        throw new Error(
-          `convertToHTML: missing HTML definition for block with type ${
-            block.type
-          }`
-        );
-      }
-
-      if (!blockHTMLResult.nest) {
-        // this block can't be nested, so reset all nesting if necessary
-        closeNestTags = listStack.reduceRight((string, nestedBlock) => {
-          return (
-            string +
-            getNestedBlockTags(getBlockHTML(nestedBlock), depth).nestEnd
-          );
-        }, '');
-        listStack = [];
-      } else {
-        while (
-          depth + 1 !== listStack.length ||
-          type !== listStack[depth].type
-        ) {
-          if (depth + 1 === listStack.length) {
-            // depth is right but doesn't match type
-            const blockToClose = listStack[depth];
-            closeNestTags += getNestedBlockTags(
-              getBlockHTML(blockToClose),
-              depth
-            ).nestEnd;
-            openNestTags += getNestedBlockTags(getBlockHTML(block), depth)
-              .nestStart;
-            listStack[depth] = block;
-          } else if (depth + 1 < listStack.length) {
-            const blockToClose = listStack[listStack.length - 1];
-            closeNestTags += getNestedBlockTags(
-              getBlockHTML(blockToClose),
-              depth
-            ).nestEnd;
-            listStack = listStack.slice(0, -1);
-          } else {
-            openNestTags += getNestedBlockTags(getBlockHTML(block), depth)
-              .nestStart;
-            listStack.push(block);
+        if (!blockHTMLResult.nest) {
+          // this block can't be nested, so reset all nesting if necessary
+          closeNestTags = listStack.reduceRight(
+            (string, nestedBlock) =>
+              string + getNestedBlockTags(getBlockHTML(nestedBlock), depth).nestEnd,
+            ''
+          )
+          listStack = []
+        } else {
+          while (depth + 1 !== listStack.length || type !== listStack[depth].type) {
+            if (depth + 1 === listStack.length) {
+              // depth is right but doesn't match type
+              const blockToClose = listStack[depth]
+              closeNestTags += getNestedBlockTags(getBlockHTML(blockToClose), depth).nestEnd
+              openNestTags += getNestedBlockTags(getBlockHTML(block), depth).nestStart
+              listStack[depth] = block
+            } else if (depth + 1 < listStack.length) {
+              const blockToClose = listStack[listStack.length - 1]
+              closeNestTags += getNestedBlockTags(getBlockHTML(blockToClose), depth).nestEnd
+              listStack = listStack.slice(0, -1)
+            } else {
+              openNestTags += getNestedBlockTags(getBlockHTML(block), depth).nestStart
+              listStack.push(block)
+            }
           }
         }
-      }
 
-      const innerHTML = blockInlineStyles(
-        blockEntities(encodeBlock(block), rawState.entityMap, entityToHTML),
-        styleToHTML
-      );
+        const innerHTML = blockInlineStyles(
+          blockEntities(encodeBlock(block), rawState.entityMap, entityToHTML),
+          styleToHTML
+        )
 
-      const blockHTML = getBlockTags(getBlockHTML(block));
+        const blockHTML = getBlockTags(getBlockHTML(block))
 
-      let html;
+        let html
 
-      if (typeof blockHTML === 'string') {
-        html = blockHTML;
-      } else {
-        html = blockHTML.start + innerHTML + blockHTML.end;
-      }
-
-      if (
-        innerHTML.length === 0 &&
-        Object.prototype.hasOwnProperty.call(blockHTML, 'empty')
-      ) {
-        if (React.isValidElement(blockHTML.empty)) {
-          html = ReactDOMServer.renderToStaticMarkup(blockHTML.empty);
+        if (typeof blockHTML === 'string') {
+          html = blockHTML
         } else {
-          html = blockHTML.empty;
+          html = blockHTML.start + innerHTML + blockHTML.end
         }
-      }
 
-      return closeNestTags + openNestTags + html;
-    })
-    .join('');
+        if (innerHTML.length === 0 && Object.prototype.hasOwnProperty.call(blockHTML, 'empty')) {
+          if (React.isValidElement(blockHTML.empty)) {
+            html = ReactDOMServer.renderToStaticMarkup(blockHTML.empty)
+          } else {
+            html = blockHTML.empty
+          }
+        }
 
-  result = listStack.reduce((res, nestBlock) => {
-    return (
-      res + getNestedBlockTags(getBlockHTML(nestBlock), nestBlock.depth).nestEnd
-    );
-  }, result);
+        return closeNestTags + openNestTags + html
+      })
+      .join('')
 
-  return result;
-};
+    result = listStack.reduce(
+      (res, nestBlock) =>
+        res + getNestedBlockTags(getBlockHTML(nestBlock), nestBlock.depth).nestEnd,
+      result
+    )
+
+    return result
+  }
 
 export default (...args) => {
   if (
@@ -144,8 +119,8 @@ export default (...args) => {
     args[0].getBlockMap != null
   ) {
     // skip higher-order function and use defaults
-    return convertToHTML({})(...args);
+    return convertToHTML({})(...args)
   }
 
-  return convertToHTML(...args);
-};
+  return convertToHTML(...args)
+}

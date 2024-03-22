@@ -1,4 +1,4 @@
-const library = 'DraftConvert';
+const library = 'DraftConvert'
 
 const baseConfig = {
   module: {
@@ -17,7 +17,7 @@ const baseConfig = {
     'react-dom': 'ReactDOM',
     'react-dom/server': 'ReactDOMServer',
   },
-};
+}
 
 module.exports = [
   {
@@ -38,4 +38,4 @@ module.exports = [
       libraryTarget: 'umd',
     },
   },
-];
+]

@@ -1,7 +1,7 @@
-import convertToHTML from '../../src/convertToHTML';
-import React from 'react';
-import { convertFromRaw } from 'draft-js';
-import uniqueId from '../util/uniqueId';
+import React from 'react'
+import { convertFromRaw } from 'draft-js'
+import convertToHTML from '../../src/convertToHTML'
+import uniqueId from '../util/uniqueId'
 
 /* eslint-disable react/no-multi-comp */
 
@@ -12,24 +12,21 @@ const buildContentBlock = ({
   styleRanges = [],
   entityRanges = [],
   data = {},
-}) => {
-  return {
-    text,
-    type,
-    data,
-    depth,
-    entityRanges,
-    inlineStyleRanges: styleRanges,
-    key: `test${uniqueId()}`,
-  };
-};
+}) => ({
+  text,
+  type,
+  data,
+  depth,
+  entityRanges,
+  inlineStyleRanges: styleRanges,
+  key: `test${uniqueId()}`,
+})
 
-const buildContentState = (blocks, entityMap = {}) => {
-  return convertFromRaw({
+const buildContentState = (blocks, entityMap = {}) =>
+  convertFromRaw({
     entityMap,
     blocks: blocks.map(buildContentBlock),
-  });
-};
+  })
 
 const styleMarkup = {
   BOLD: {
@@ -44,7 +41,7 @@ const styleMarkup = {
     start: '<u>',
     end: '</u>',
   },
-};
+}
 
 describe('convertToHTML', () => {
   it('returns an empty div for an empty unstyled block', () => {
@@ -53,10 +50,10 @@ describe('convertToHTML', () => {
         type: 'unstyled',
         text: '',
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<p></p>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<p></p>')
+  })
 
   it('uses empty state for an empty block', () => {
     const contentState = buildContentState([
@@ -64,7 +61,7 @@ describe('convertToHTML', () => {
         type: 'unstyled',
         text: '',
       },
-    ]);
+    ])
 
     const result = convertToHTML({
       blockToHTML: {
@@ -74,10 +71,10 @@ describe('convertToHTML', () => {
           empty: '<br>',
         },
       },
-    })(contentState);
+    })(contentState)
 
-    expect(result).toBe('<br>');
-  });
+    expect(result).toBe('<br>')
+  })
 
   it('applies inline styles to a block', () => {
     const contentState = buildContentState([
@@ -92,12 +89,12 @@ describe('convertToHTML', () => {
           },
         ],
       },
-    ]);
+    ])
     const result = convertToHTML({
       styleToHTML: styleMarkup,
-    })(contentState);
-    expect(result).toBe('<p>this is <b>bold</b></p>');
-  });
+    })(contentState)
+    expect(result).toBe('<p>this is <b>bold</b></p>')
+  })
 
   it('applies paragraph block styles', () => {
     const contentState = buildContentState([
@@ -105,10 +102,10 @@ describe('convertToHTML', () => {
         type: 'paragraph',
         text: 'test paragraph',
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<p>test paragraph</p>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<p>test paragraph</p>')
+  })
 
   it('applies code block styles', () => {
     const contentState = buildContentState([
@@ -116,10 +113,10 @@ describe('convertToHTML', () => {
         type: 'code-block',
         text: 'test code block',
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<pre>test code block</pre>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<pre>test code block</pre>')
+  })
 
   it('applies style to multiple blocks', () => {
     const contentState = buildContentState([
@@ -131,10 +128,10 @@ describe('convertToHTML', () => {
         type: 'header-two',
         text: 'h2 block',
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<h1>h1 block</h1><h2>h2 block</h2>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<h1>h1 block</h1><h2>h2 block</h2>')
+  })
 
   it('applies styles for single list', () => {
     const contentState = buildContentState([
@@ -146,10 +143,10 @@ describe('convertToHTML', () => {
         type: 'ordered-list-item',
         text: 'item two',
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<ol type="1"><li>item one</li><li>item two</li></ol>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<ol type="1"><li>item one</li><li>item two</li></ol>')
+  })
 
   it('applies type attribute for nested ordered lists', () => {
     const contentState = buildContentState([
@@ -168,12 +165,12 @@ describe('convertToHTML', () => {
         text: 'sub-sub item one',
         depth: 2,
       },
-    ]);
-    const result = convertToHTML(contentState);
+    ])
+    const result = convertToHTML(contentState)
     expect(result).toBe(
       '<ol type="1"><li>top level item one</li><ol type="a"><li>sub item one</li><ol type="i"><li>sub-sub item one</li></ol></ol></ol>'
-    );
-  });
+    )
+  })
 
   it('nests list items of different depths', () => {
     const contentState = buildContentState([
@@ -187,12 +184,10 @@ describe('convertToHTML', () => {
         text: 'nested item',
         depth: 1,
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe(
-      '<ul><li>top level</li><ul><li>nested item</li></ul></ul>'
-    );
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<ul><li>top level</li><ul><li>nested item</li></ul></ul>')
+  })
 
   it('resets nesting when depth decreases', () => {
     const contentState = buildContentState([
@@ -216,12 +211,12 @@ describe('convertToHTML', () => {
         text: 'back to top level',
         depth: 0,
       },
-    ]);
-    const result = convertToHTML(contentState);
+    ])
+    const result = convertToHTML(contentState)
     expect(result).toBe(
       '<ul><li>top level</li><ul><li>nested one level</li><ul><li>nested two levels</li></ul></ul><li>back to top level</li></ul>'
-    );
-  });
+    )
+  })
 
   it('escapes HTML in text of blocks', () => {
     const contentState = buildContentState([
@@ -229,10 +224,10 @@ describe('convertToHTML', () => {
         type: 'unstyled',
         text: '<&>',
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<p>&lt;&amp;&gt;</p>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<p>&lt;&amp;&gt;</p>')
+  })
 
   it('escapes HTML in text of blocks before mutations', () => {
     const contentState = buildContentState([
@@ -247,10 +242,10 @@ describe('convertToHTML', () => {
           },
         ],
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<p>&lt;&amp;&gt;<strong>test</strong></p>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<p>&lt;&amp;&gt;<strong>test</strong></p>')
+  })
 
   it('escapes HTML in text of blocks within mutations', () => {
     const contentState = buildContentState([
@@ -265,10 +260,10 @@ describe('convertToHTML', () => {
           },
         ],
       },
-    ]);
-    const result = convertToHTML(contentState);
-    expect(result).toBe('<p>t<strong>e&lt;&amp;&gt;s</strong>t</p>');
-  });
+    ])
+    const result = convertToHTML(contentState)
+    expect(result).toBe('<p>t<strong>e&lt;&amp;&gt;s</strong>t</p>')
+  })
 
   it('escapes HTML in text of blocks before entities', () => {
     const contentState = buildContentState(
@@ -291,18 +286,19 @@ describe('convertToHTML', () => {
           mutability: 'IMMUTABLE',
         },
       }
-    );
+    )
 
     const result = convertToHTML({
       entityToHTML: (entity, originalText) => {
         if (entity.type === 'LINK') {
-          return `<a>${originalText}</a>`;
+          return `<a>${originalText}</a>`
         }
-        return originalText;
+
+        return originalText
       },
-    })(contentState);
-    expect(result).toBe('<p>&lt;&amp;&gt;<a>test</a></p>');
-  });
+    })(contentState)
+    expect(result).toBe('<p>&lt;&amp;&gt;<a>test</a></p>')
+  })
 
   it('escapes HTML in text of blocks before entities', () => {
     const contentState = buildContentState(
@@ -332,18 +328,19 @@ describe('convertToHTML', () => {
           mutability: 'IMMUTABLE',
         },
       }
-    );
+    )
 
     const result = convertToHTML({
       entityToHTML: (entity, originalText) => {
         if (entity.type === 'LINK') {
-          return `<a>${originalText}</a>`;
+          return `<a>${originalText}</a>`
         }
-        return originalText;
+
+        return originalText
       },
-    })(contentState);
-    expect(result).toBe('<p>t<a>e&lt;&amp;&gt;s</a><strong>t</strong></p>');
-  });
+    })(contentState)
+    expect(result).toBe('<p>t<a>e&lt;&amp;&gt;s</a><strong>t</strong></p>')
+  })
 
   it('uses block metadata', () => {
     const contentState = buildContentState([
@@ -355,39 +352,39 @@ describe('convertToHTML', () => {
           attribute: 'value',
         },
       },
-    ]);
+    ])
 
     const result = convertToHTML({
-      blockToHTML: block => {
+      blockToHTML: (block) => {
         if (block.type === 'custom') {
-          const { tagName, attribute } = block.data;
+          const { tagName, attribute } = block.data
 
           return {
             start: `<${tagName} attribute="${attribute}">`,
             end: `</${tagName}>`,
-          };
+          }
         }
       },
-    })(contentState);
+    })(contentState)
 
-    expect(result).toBe('<customtag attribute="value">test</customtag>');
-  });
+    expect(result).toBe('<customtag attribute="value">test</customtag>')
+  })
 
   describe('combine styles and entities', () => {
     const convertToHTMLProps = {
       entityToHTML: (entity, originalText) => {
         if (entity.type === 'LINK') {
-          const { data } = entity;
+          const { data } = entity
 
           return {
             start: `<a href="${data.href}">`,
             end: '</a>',
-          };
+          }
         }
 
-        return originalText;
+        return originalText
       },
-    };
+    }
 
     it('combines styles and entities without overlap', () => {
       const contentState = buildContentState(
@@ -425,14 +422,14 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
 
       expect(result).toBe(
         '<p><a href="http://google.com"><strong>overlapping st</strong><em>yles in entity</em></a></p>'
-      );
-    });
+      )
+    })
 
     it('combines overlapping styles and entities', () => {
       const contentState = buildContentState(
@@ -470,14 +467,14 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
 
       expect(result).toBe(
         '<p><a href="http://google.com"><strong>overlapping </strong><em><strong>st</strong>yles in enti</em>ty</a></p>'
-      );
-    });
+      )
+    })
 
     it('combines styles and entities when intersecting with no style to left', () => {
       const contentState = buildContentState(
@@ -510,14 +507,14 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
 
       expect(result).toBe(
         '<p><strong>overlapping </strong><a href="http://google.com"><strong>st</strong>yles</a> in entity</p>'
-      );
-    });
+      )
+    })
 
     it('combines styles and entities when intersecting with no style text to right', () => {
       const contentState = buildContentState(
@@ -550,14 +547,14 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
 
       expect(result).toBe(
         '<p>overlapping <a href="http://google.com">st<strong>yles</strong></a><strong> in entity</strong></p>'
-      );
-    });
+      )
+    })
 
     it('correctly handles mutation containing another prefixed mutation', () => {
       const contentState = buildContentState(
@@ -607,14 +604,14 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
 
       expect(result).toBe(
         '<p><strong>overlapping</strong> test <a href="http://google.com">Hello</a> <em><a href="http://google.com">World</a></em></p>'
-      );
-    });
+      )
+    })
 
     it('combines styles and entities when intersection with no style text to right and left', () => {
       const contentState = buildContentState(
@@ -652,14 +649,14 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
 
       expect(result).toBe(
         '<p><strong>overlapping </strong><a href="http://google.com"><strong>st</strong>yl<strong>es</strong></a><strong> in entity</strong></p>'
-      );
-    });
+      )
+    })
 
     it('combines overlapping styles and entities when intersecting with no style', () => {
       const contentState = buildContentState(
@@ -697,26 +694,26 @@ describe('convertToHTML', () => {
             },
           },
         }
-      );
+      )
 
-      const result = convertToHTML(convertToHTMLProps)(contentState);
+      const result = convertToHTML(convertToHTMLProps)(contentState)
       expect(result).toBe(
         '<p><strong>overlappin</strong><em><strong>g </strong><a href="http://google.com"><strong>st</strong>yles</a> in en</em>tity</p>'
-      );
-    });
-  });
+      )
+    })
+  })
 
   it('allows specifying custom nested block types', () => {
     const convertToHTMLProps = {
-      blockToHTML: block => {
+      blockToHTML: (block) => {
         if (block.type === 'checkable-list-item') {
           return {
             element: <li data-checked={block.data.checked || false} />,
             nest: <ul />,
-          };
+          }
         }
       },
-    };
+    }
 
     const contentState = buildContentState([
       {
@@ -733,12 +730,12 @@ describe('convertToHTML', () => {
           checked: true,
         },
       },
-    ]);
-    const result = convertToHTML(convertToHTMLProps)(contentState);
+    ])
+    const result = convertToHTML(convertToHTMLProps)(contentState)
     expect(result).toBe(
       '<ul><li data-checked="false">item one</li><li data-checked="true">item two</li></ul>'
-    );
-  });
+    )
+  })
 
   it('combines styles and entities without overlap using react to convert to HTML', () => {
     const contentState = buildContentState(
@@ -776,24 +773,24 @@ describe('convertToHTML', () => {
           },
         },
       }
-    );
+    )
 
     const result = convertToHTML({
       entityToHTML: (entity, originalText) => {
         if (entity.type === 'LINK') {
-          const { data } = entity;
+          const { data } = entity
 
-          return <a href={data.href} />;
+          return <a href={data.href} />
         }
 
-        return originalText;
+        return originalText
       },
-    })(contentState);
+    })(contentState)
 
     expect(result).toBe(
       '<p><a href="http://google.com"><strong>overlapping st</strong><em>yles in entity</em></a></p>'
-    );
-  });
+    )
+  })
 
   it('uses JSX for block HTML', () => {
     const contentState = buildContentState([
@@ -801,18 +798,18 @@ describe('convertToHTML', () => {
         type: 'unstyled',
         text: 'test',
       },
-    ]);
+    ])
 
     const html = convertToHTML({
-      blockToHTML: block => {
+      blockToHTML: (block) => {
         if (block.type === 'unstyled') {
-          return <testelement />;
+          return <testelement />
         }
       },
-    })(contentState);
+    })(contentState)
 
-    expect(html).toBe('<testelement>test</testelement>');
-  });
+    expect(html).toBe('<testelement>test</testelement>')
+  })
 
   it('uses JSX with style for block HTML', () => {
     const contentState = buildContentState([
@@ -821,18 +818,18 @@ describe('convertToHTML', () => {
         text: 'test',
         data: { align: 'right' },
       },
-    ]);
+    ])
 
     const html = convertToHTML({
-      blockToHTML: block => {
+      blockToHTML: (block) => {
         if (block.type === 'unstyled' && block.data.align) {
-          return <p style={{ textAlign: block.data.align }} />;
+          return <p style={{ textAlign: block.data.align }} />
         }
       },
-    })(contentState);
+    })(contentState)
 
-    expect(html).toBe('<p style="text-align:right">test</p>');
-  });
+    expect(html).toBe('<p style="text-align:right">test</p>')
+  })
 
   it('uses JSX for block HTML when passing a middleware function', () => {
     const contentState = buildContentState([
@@ -840,21 +837,24 @@ describe('convertToHTML', () => {
         type: 'unstyled',
         text: 'test',
       },
-    ]);
+    ])
 
-    const blockToHTML = next => block => {
-      if (block.type === 'unstyled') {
-        return <testelement />;
+    const blockToHTML = (next) =>
+      function (block) {
+        const { type } = block
+        if (type === 'unstyled') {
+          return <testelement />
+        }
+
+        return next(block)
       }
-      return next(block);
-    };
 
-    blockToHTML.__isMiddleware = true;
+    blockToHTML.__isMiddleware = true
 
-    const html = convertToHTML({ blockToHTML })(contentState);
+    const html = convertToHTML({ blockToHTML })(contentState)
 
-    expect(html).toBe('<testelement>test</testelement>');
-  });
+    expect(html).toBe('<testelement>test</testelement>')
+  })
 
   it('allows void elements to be result of blockToHTML', () => {
     const contentState = buildContentState([
@@ -862,18 +862,18 @@ describe('convertToHTML', () => {
         type: 'image',
         text: 'test',
       },
-    ]);
+    ])
 
-    const blockToHTML = block => {
+    const blockToHTML = (block) => {
       if (block.type === 'image') {
-        return <img />;
+        return <img />
       }
-    };
+    }
 
-    const html = convertToHTML({ blockToHTML })(contentState);
+    const html = convertToHTML({ blockToHTML })(contentState)
 
-    expect(html).toBe('<img/>');
-  });
+    expect(html).toBe('<img/>')
+  })
 
   // '👍'.length === 2
   // '⛳'.length === 1
@@ -902,18 +902,18 @@ describe('convertToHTML', () => {
           },
         },
       }
-    );
+    )
 
     const result = convertToHTML({
       entityToHTML(entity, originalText) {
         if (entity.type === 'emoji') {
-          return entity.data.emojiUnicode;
+          return entity.data.emojiUnicode
         }
       },
-    })(contentState);
+    })(contentState)
 
-    expect(result).toBe('<p>👍</p>');
-  });
+    expect(result).toBe('<p>👍</p>')
+  })
 
   it('supports a string output for blockToHTML', () => {
     const contentState = buildContentState([
@@ -921,20 +921,20 @@ describe('convertToHTML', () => {
         text: 'test',
         type: 'unstyled',
       },
-    ]);
+    ])
 
-    const blockContents = '<div>unstyled block</div>';
+    const blockContents = '<div>unstyled block</div>'
 
     const result = convertToHTML({
-      blockToHTML: block => {
+      blockToHTML: (block) => {
         if (block.type === 'unstyled') {
-          return blockContents;
+          return blockContents
         }
       },
-    })(contentState);
+    })(contentState)
 
-    expect(result).toBe(blockContents);
-  });
+    expect(result).toBe(blockContents)
+  })
 
   it('handles overlapping entity and style', () => {
     const contentState = buildContentState(
@@ -965,25 +965,25 @@ describe('convertToHTML', () => {
           data: {},
         },
       }
-    );
+    )
 
     const html = convertToHTML({
-      styleToHTML: style => {
+      styleToHTML: (style) => {
         if (style === 'ITALIC') {
-          return <i />;
+          return <i />
         }
       },
       entityToHTML: (entity, originalText) => {
         if (entity.type === 'LINK') {
-          return <a href="http://test.com">{originalText}</a>;
+          return <a href="http://test.com">{originalText}</a>
         }
       },
-    })(contentState);
+    })(contentState)
 
     expect(html).toBe(
       '<p><a href="http://test.com">Lorem ipsum dolor sit <i>amet</i></a><i>, consectetur adipiscing elit.</i></p>'
-    );
-  });
+    )
+  })
 
   it('handles offset of entities after an emoji', () => {
     const contentState = buildContentState(
@@ -1022,19 +1022,20 @@ describe('convertToHTML', () => {
           },
         },
       }
-    );
+    )
 
     const result = convertToHTML({
       entityToHTML(entity, originalText) {
         if (entity.type === 'emoji') {
-          return entity.data.emojiUnicode;
-        } else if (entity.type === 'mention') {
-          return <a href={entity.data.href}>{originalText}</a>; // <-- originalText here is "anti Albo"
+          return entity.data.emojiUnicode
+        }
+        if (entity.type === 'mention') {
+          return <a href={entity.data.href}>{originalText}</a> // <-- originalText here is "anti Albo"
         }
       },
-    })(contentState);
-    expect(result).toBe('<p>👍 <a href="/users/1">Santi Albo</a></p>');
-  });
+    })(contentState)
+    expect(result).toBe('<p>👍 <a href="/users/1">Santi Albo</a></p>')
+  })
 
   it('handles offset of entities after an emoji with newline', () => {
     const contentState = buildContentState(
@@ -1073,21 +1074,20 @@ describe('convertToHTML', () => {
           },
         },
       }
-    );
+    )
 
     const result = convertToHTML({
       entityToHTML(entity, originalText) {
         if (entity.type === 'emoji') {
-          return entity.data.emojiUnicode;
-        } else if (entity.type === 'link') {
-          return <a href={entity.data.url}>{originalText}</a>;
+          return entity.data.emojiUnicode
+        }
+        if (entity.type === 'link') {
+          return <a href={entity.data.url}>{originalText}</a>
         }
       },
-    })(contentState);
-    expect(result).toBe(
-      '<p>👍 <br/><a href="https://www.google.com">Santi Albo</a></p>'
-    );
-  });
+    })(contentState)
+    expect(result).toBe('<p>👍 <br/><a href="https://www.google.com">Santi Albo</a></p>')
+  })
 
   it('throws a meaningful error when no block definition exists', () => {
     const contentState = buildContentState([
@@ -1095,10 +1095,8 @@ describe('convertToHTML', () => {
         type: 'test',
         text: 'asdf',
       },
-    ]);
+    ])
 
-    expect(() => convertToHTML(contentState)).toThrowError(
-      /missing HTML definition/
-    );
-  });
-});
+    expect(() => convertToHTML(contentState)).toThrowError(/missing HTML definition/)
+  })
+})
