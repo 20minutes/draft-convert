@@ -1,19 +1,19 @@
-import React from 'react';
+import React from 'react'
 
 export default function defaultInlineHTML(style) {
   switch (style) {
     case 'BOLD':
-      return <strong />;
+      return <strong />
     case 'ITALIC':
-      return <em />;
+      return <em />
     case 'UNDERLINE':
-      return <u />;
+      return <u />
     case 'CODE':
-      return <code />;
+      return <code />
     default:
       return {
         start: '',
         end: '',
-      };
+      }
   }
 }

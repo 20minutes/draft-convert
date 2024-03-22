@@ -1,6 +1,7 @@
-let nextId = 0;
+let nextId = 0
 
 export default () => {
-  nextId++;
-  return nextId - 1;
-};
+  nextId += 1
+
+  return nextId - 1
+}

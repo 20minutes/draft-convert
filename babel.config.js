@@ -4,7 +4,7 @@ module.exports = {
   env: {
     esm: {
       presets: [['@babel/env', { modules: false }]],
-      plugins: [['@babel/transform-runtime', { useESModules: true }]]
-    }
-  }
-};
+      plugins: [['@babel/transform-runtime', { useESModules: true }]],
+    },
+  },
+}
