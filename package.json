@@ -1,6 +1,6 @@
 {
   "name": "@20minutes/draft-convert",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Extensibly serialize & deserialize Draft.js ContentState",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
