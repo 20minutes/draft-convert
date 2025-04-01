@@ -3,8 +3,6 @@ import { convertFromRaw } from 'draft-js'
 import convertToHTML from '../../src/convertToHTML'
 import uniqueId from '../util/uniqueId'
 
-/* eslint-disable react/no-multi-comp */
-
 const buildContentBlock = ({
   type = 'unstyled',
   depth = 0,
