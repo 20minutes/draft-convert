@@ -1095,7 +1095,7 @@ describe('convertToHTML', () => {
       },
     ])
 
-    expect(() => convertToHTML(contentState)).toThrowError(/missing HTML definition/)
+    expect(() => convertToHTML(contentState)).toThrow(/missing HTML definition/)
   })
 
   it('validate final HTML', () => {
