@@ -1,33 +1,30 @@
-name: Node.js Package
+name: Node Publish
 
 on:
   release:
-    types: [created]
+    types:
+      - created
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: use node
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version-file: '.nvmrc'
           cache: 'yarn'
+          registry-url: https://registry.npmjs.org/
+
       - run: yarn install
+
+      - run: yarn build
+
       - run: yarn test
 
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org/
-          cache: 'yarn'
-      - run: yarn install
-      - run: yarn build
       - run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
