@@ -1,9 +1,8 @@
 @20minutes/draft-convert
 ===============
 
-[![Node CI](https://github.com/20minutes/draft-convert/actions/workflows/ci.yml/badge.svg)](https://github.com/20minutes/draft-convert/actions/workflows/ci.yml)
-[![npm version](https://badge.fury.io/js/@20minutes%2Fdraft-convert.svg)](https://badge.fury.io/js/@20minutes%2Fdraft-convert)
-[![npm downloads](https://img.shields.io/npm/dt/@20minutes%2Fdraft-convert.svg?style=flat)](https://www.npmjs.com/package/@20minutes%2Fdraft-convert)
+[![Build status](https://github.com/20minutes/draft-convert/actions/workflows/tests.yml/badge.svg)](https://github.com/20minutes/draft-convert/actions/workflows/tests.yml)
+[![NPM](https://img.shields.io/npm/v/@20minutes/draft-convert)](https://www.npmjs.com/package/@20minutes/draft-convert)
 
 Forked version:
 - with deps up to date
