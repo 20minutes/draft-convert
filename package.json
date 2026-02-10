@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@20minutes/eslint-config": "^2.0.0",
-    "@swc/cli": "^0.7.10",
+    "@swc/cli": "^0.8.0",
     "@swc/core": "^1.9.2",
     "@swc/jest": "^0.2.36",
     "draft-js": "^0.11.7",
