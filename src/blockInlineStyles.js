@@ -1,9 +1,9 @@
 import invariant from 'invariant'
-import styleObjectFunction from './util/styleObjectFunction'
-import accumulateFunction from './util/accumulateFunction'
-import getElementHTML from './util/getElementHTML'
-import rangeSort from './util/rangeSort'
-import defaultInlineHTML from './default/defaultInlineHTML'
+import styleObjectFunction from './util/styleObjectFunction.js'
+import accumulateFunction from './util/accumulateFunction.js'
+import getElementHTML from './util/getElementHTML.js'
+import rangeSort from './util/rangeSort.js'
+import defaultInlineHTML from './default/defaultInlineHTML.js'
 
 const subtractStyles = (original, toRemove) =>
   original.filter((el) => !toRemove.some((elToRemove) => elToRemove.style === el.style))

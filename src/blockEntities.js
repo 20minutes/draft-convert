@@ -1,7 +1,7 @@
-import updateMutation from './util/updateMutation'
-import rangeSort from './util/rangeSort'
-import getElementHTML from './util/getElementHTML'
-import getElementTagLength from './util/getElementTagLength'
+import updateMutation from './util/updateMutation.js'
+import rangeSort from './util/rangeSort.js'
+import getElementHTML from './util/getElementHTML.js'
+import getElementTagLength from './util/getElementTagLength.js'
 
 const converter = (entity = {}, originalText = '') => originalText
 

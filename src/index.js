@@ -1,5 +1,5 @@
-import convertToHTML from './convertToHTML'
-import convertFromHTML from './convertFromHTML'
-import parseHTML from './util/parseHTML'
+import convertToHTML from './convertToHTML.js'
+import convertFromHTML from './convertFromHTML.js'
+import parseHTML from './util/parseHTML.js'
 
 export { convertToHTML, convertFromHTML, parseHTML }

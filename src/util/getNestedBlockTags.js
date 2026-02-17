@@ -1,6 +1,6 @@
 import invariant from 'invariant'
 import React from 'react'
-import splitReactElement from './splitReactElement'
+import splitReactElement from './splitReactElement.js'
 
 export default function getNestedBlockTags(blockHTML, depth) {
   invariant(

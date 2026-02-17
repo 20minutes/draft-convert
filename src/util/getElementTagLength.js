@@ -1,5 +1,5 @@
 import React from 'react'
-import splitReactElement from './splitReactElement'
+import splitReactElement from './splitReactElement.js'
 
 const getElementTagLength = (element, type = 'start') => {
   if (React.isValidElement(element)) {

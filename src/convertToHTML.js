@@ -1,15 +1,17 @@
 import invariant from 'invariant'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import { convertToRaw } from 'draft-js'
-import encodeBlock from './encodeBlock'
-import blockEntities from './blockEntities'
-import blockInlineStyles from './blockInlineStyles'
-import accumulateFunction from './util/accumulateFunction'
-import blockTypeObjectFunction from './util/blockTypeObjectFunction'
-import getBlockTags from './util/getBlockTags'
-import getNestedBlockTags from './util/getNestedBlockTags'
-import defaultBlockHTML from './default/defaultBlockHTML'
+import * as DraftJS from 'draft-js'
+import encodeBlock from './encodeBlock.js'
+import blockEntities from './blockEntities.js'
+import blockInlineStyles from './blockInlineStyles.js'
+import accumulateFunction from './util/accumulateFunction.js'
+import blockTypeObjectFunction from './util/blockTypeObjectFunction.js'
+import getBlockTags from './util/getBlockTags.js'
+import getNestedBlockTags from './util/getNestedBlockTags.js'
+import defaultBlockHTML from './default/defaultBlockHTML.js'
+
+const { convertToRaw } = DraftJS
 
 const defaultEntityToHTML = (entity, originalText) => originalText
 const defaultValidateHTML = (html) => true

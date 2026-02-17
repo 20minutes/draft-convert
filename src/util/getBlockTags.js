@@ -1,7 +1,7 @@
 import invariant from 'invariant'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import splitReactElement from './splitReactElement'
+import splitReactElement from './splitReactElement.js'
 
 function hasChildren(element) {
   return React.isValidElement(element) && React.Children.count(element.props.children) > 0
