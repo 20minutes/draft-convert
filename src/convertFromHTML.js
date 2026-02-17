@@ -10,8 +10,13 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import { List, Map, OrderedSet } from 'immutable'
-import {
+import * as Immutable from 'immutable'
+import * as DraftJS from 'draft-js'
+import getSafeBodyFromHTML from './util/parseHTML.js'
+import rangeSort from './util/rangeSort.js'
+
+const { List, Map, OrderedSet } = Immutable
+const {
   BlockMapBuilder,
   CharacterMetadata,
   ContentBlock,
@@ -19,9 +24,7 @@ import {
   Entity,
   SelectionState,
   genKey,
-} from 'draft-js'
-import getSafeBodyFromHTML from './util/parseHTML'
-import rangeSort from './util/rangeSort'
+} = DraftJS
 
 const SPACE = ' '
 
