@@ -1,7 +1,7 @@
 import invariant from 'invariant'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import * as DraftJS from 'draft-js'
+import DraftJS from 'draft-js'
 import encodeBlock from './encodeBlock.js'
 import blockEntities from './blockEntities.js'
 import blockInlineStyles from './blockInlineStyles.js'
