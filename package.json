@@ -1,32 +1,32 @@
 {
   "name": "@20minutes/draft-convert",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Extensibly serialize & deserialize Draft.js ContentState",
-  "main": "lib/index.js",
-  "types": "types/index.d.ts",
-  "module": "esm/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "require": "./lib/index.js",
-      "import": "./esm/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
     }
   },
   "repository": "20minutes/draft-convert",
   "scripts": {
-    "build": "yarn build:cjs && yarn build:esm",
-    "build:cjs": "swc src -d lib --config-file .swcrc.cjs --strip-leading-paths --delete-dir-on-start",
-    "build:esm": "swc src -d esm --config-file .swcrc.esm --strip-leading-paths --delete-dir-on-start",
+    "build": "yarn clean && yarn build:esm && yarn build:cjs && yarn build:types",
+    "build:cjs": "swc src -d dist --config-file .swcrc.cjs --strip-leading-paths && node scripts/rename-dist-cjs-entry.js",
+    "build:esm": "swc src -d dist --config-file .swcrc.esm --strip-leading-paths --delete-dir-on-start --out-file-extension mjs && node scripts/fix-dist-esm-imports.js",
+    "build:types": "node scripts/build-dist-types.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "clean": "rimraf ./lib ./esm",
+    "clean": "rimraf ./dist ./lib ./esm",
     "build-and-test": "yarn clean && yarn test",
     "lint": "eslint src/ test/"
   },
   "files": [
-    "types",
-    "lib",
-    "esm"
+    "dist"
   ],
   "keywords": [
     "draft",

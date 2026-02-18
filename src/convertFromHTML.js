@@ -10,11 +10,14 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import * as Immutable from 'immutable'
-import * as DraftJS from 'draft-js'
+// immutable is CJS-only; default import maps to module.exports for Node ESM interop.
+// eslint-disable-next-line import/default
+import Immutable from 'immutable'
+import DraftJS from 'draft-js'
 import getSafeBodyFromHTML from './util/parseHTML.js'
 import rangeSort from './util/rangeSort.js'
 
+// eslint-disable-next-line import/no-named-as-default-member
 const { List, Map, OrderedSet } = Immutable
 const {
   BlockMapBuilder,
