@@ -10,15 +10,11 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-// immutable is CJS-only; default import maps to module.exports for Node ESM interop.
-// eslint-disable-next-line import/default
-import Immutable from 'immutable'
 import DraftJS from 'draft-js'
+import Immutable from 'immutable'
 import getSafeBodyFromHTML from './util/parseHTML.js'
 import rangeSort from './util/rangeSort.js'
 
-// eslint-disable-next-line import/no-named-as-default-member
-const { List, Map, OrderedSet } = Immutable
 const {
   BlockMapBuilder,
   CharacterMetadata,
@@ -63,13 +59,13 @@ const handleMiddleware = (maybeMiddleware, base) => {
   return maybeMiddleware
 }
 
-const defaultHTMLToBlock = (nodeName, node, lastList) => undefined
+const defaultHTMLToBlock = (_nodeName, _node, _lastList) => undefined
 
-const defaultHTMLToStyle = (nodeName, node, currentStyle) => currentStyle
+const defaultHTMLToStyle = (_nodeName, _node, currentStyle) => currentStyle
 
-const defaultHTMLToEntity = (nodeName, node) => undefined
+const defaultHTMLToEntity = (_nodeName, _node) => undefined
 
-const defaultTextToEntity = (text) => []
+const defaultTextToEntity = (_text) => []
 
 const nullthrows = (x) => {
   if (x != null) {
@@ -97,17 +93,17 @@ function getWhitespaceChunk(inEntity) {
 
   return {
     text: SPACE,
-    inlines: [OrderedSet()],
+    inlines: [Immutable.OrderedSet()],
     entities,
     blocks: [],
   }
 }
 
-function getSoftNewlineChunk(block, depth, flat = false, data = Map()) {
+function getSoftNewlineChunk(block, depth, flat = false, data = Immutable.Map()) {
   if (flat === true) {
     return {
       text: '\r',
-      inlines: [OrderedSet()],
+      inlines: [Immutable.OrderedSet()],
       entities: new Array(1),
       blocks: [
         {
@@ -122,16 +118,16 @@ function getSoftNewlineChunk(block, depth, flat = false, data = Map()) {
 
   return {
     text: '\n',
-    inlines: [OrderedSet()],
+    inlines: [Immutable.OrderedSet()],
     entities: new Array(1),
     blocks: [],
   }
 }
 
-function getBlockDividerChunk(block, depth, data = Map()) {
+function getBlockDividerChunk(block, depth, data = Immutable.Map()) {
   return {
     text: '\r',
-    inlines: [OrderedSet()],
+    inlines: [Immutable.OrderedSet()],
     entities: new Array(1),
     blocks: [
       {
@@ -175,7 +171,7 @@ function getBlockTypeForTag(tag, lastList) {
   }
 }
 
-function baseCheckBlockType(nodeName, node, lastList) {
+function baseCheckBlockType(nodeName, _node, lastList) {
   return getBlockTypeForTag(nodeName, lastList)
 }
 
@@ -209,7 +205,7 @@ function processInlineTag(tag, node, currentStyle) {
   return currentStyle
 }
 
-function baseProcessInlineTag(tag, node, inlineStyles = OrderedSet()) {
+function baseProcessInlineTag(tag, node, inlineStyles = Immutable.OrderedSet()) {
   return processInlineTag(tag, node, inlineStyles)
 }
 
@@ -376,10 +372,10 @@ function genFragment(
 
   if (typeof blockInfo === 'string') {
     blockType = blockInfo
-    blockDataMap = Map()
+    blockDataMap = Immutable.Map()
   } else {
     blockType = typeof blockInfo === 'string' ? blockInfo : blockInfo.type
-    blockDataMap = blockInfo.data ? Map(blockInfo.data) : Map()
+    blockDataMap = blockInfo.data ? Immutable.Map(blockInfo.data) : Immutable.Map()
   }
   if (!inBlock && (fragmentBlockTags.indexOf(nodeName) !== -1 || blockType)) {
     chunk = getBlockDividerChunk(
@@ -472,10 +468,10 @@ function genFragment(
 
         if (typeof newBlockInfo === 'string') {
           newBlockType = newBlockInfo
-          newBlockData = Map()
+          newBlockData = Immutable.Map()
         } else {
           newBlockType = newBlockInfo.type || getBlockTypeForTag(nodeName, lastList)
-          newBlockData = newBlockInfo.data ? Map(newBlockInfo.data) : Map()
+          newBlockData = newBlockInfo.data ? Immutable.Map(newBlockInfo.data) : Immutable.Map()
         }
 
         chunk = joinChunks(
@@ -492,7 +488,11 @@ function genFragment(
   }
 
   if (newBlock) {
-    chunk = joinChunks(chunk, getBlockDividerChunk(nextBlockType, depth, Map()), options.flat)
+    chunk = joinChunks(
+      chunk,
+      getBlockDividerChunk(nextBlockType, depth, Immutable.Map()),
+      options.flat
+    )
   }
 
   return chunk
@@ -527,7 +527,7 @@ function getChunkForHTML(
   // UL block to sta rt with.
   let chunk = genFragment(
     safeBody,
-    OrderedSet(),
+    Immutable.OrderedSet(),
     'ul',
     null,
     workingBlocks,
@@ -563,14 +563,14 @@ function getChunkForHTML(
 
   // If we saw no block tags, put an unstyled one in
   if (chunk.blocks.length === 0) {
-    chunk.blocks.push({ type: 'unstyled', data: Map(), depth: 0 })
+    chunk.blocks.push({ type: 'unstyled', data: Immutable.Map(), depth: 0 })
   }
 
   // Sometimes we start with text that isn't in a block, which is then
   // followed by blocks. Need to fix up the blocks to add in
   // an unstyled block for this content
   if (chunk.text.split('\r').length === chunk.blocks.length + 1) {
-    chunk.blocks.unshift({ type: 'unstyled', data: Map(), depth: 0 })
+    chunk.blocks.unshift({ type: 'unstyled', data: Immutable.Map(), depth: 0 })
   }
 
   return chunk
@@ -619,7 +619,7 @@ function convertFromHTMLtoContentBlocks(
     const end = start + textBlock.length
     const inlines = nullthrows(chunk).inlines.slice(start, end)
     const entities = nullthrows(chunk).entities.slice(start, end)
-    const characterList = List(
+    const characterList = Immutable.List(
       inlines.map((style, entityIndex) => {
         const data = { style, entity: null }
         if (entities[entityIndex]) {

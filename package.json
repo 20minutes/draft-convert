@@ -16,14 +16,15 @@
   "repository": "20minutes/draft-convert",
   "scripts": {
     "build": "yarn clean && yarn build:esm && yarn build:cjs && yarn build:types",
-    "build:cjs": "swc src -d dist --config-file .swcrc.cjs --strip-leading-paths && node scripts/rename-dist-cjs-entry.js",
-    "build:esm": "swc src -d dist --config-file .swcrc.esm --strip-leading-paths --delete-dir-on-start --out-file-extension mjs && node scripts/fix-dist-esm-imports.js",
+    "build:cjs": "swc src -d dist --config-file .cjs.swcrc --strip-leading-paths && node scripts/rename-dist-cjs-entry.js",
+    "build:esm": "swc src -d dist --config-file .esm.swcrc --strip-leading-paths --delete-dir-on-start --out-file-extension mjs && node scripts/fix-dist-esm-imports.js",
     "build:types": "node scripts/build-dist-types.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "clean": "rimraf ./dist ./lib ./esm",
     "build-and-test": "yarn clean && yarn test",
-    "lint": "eslint src/ test/"
+    "lint": "biome check --max-diagnostics=none",
+    "lint:fix": "biome check --write --unsafe --max-diagnostics=none"
   },
   "files": [
     "dist"
@@ -49,17 +50,11 @@
     "invariant": "^2.2.1"
   },
   "devDependencies": {
-    "@20minutes/eslint-config": "^2.0.0",
+    "@20minutes/eslint-config": "^3.0.0",
     "@swc/cli": "^0.8.0",
     "@swc/core": "^1.9.2",
     "@swc/jest": "^0.2.36",
     "draft-js": "^0.11.7",
-    "eslint": "^9.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "prettier": "^3.6.2",

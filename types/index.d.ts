@@ -12,10 +12,7 @@ import {
 } from 'draft-js'
 import { ReactNode } from 'react'
 
-export type RawDraftContentBlockWithCustomType<T> = Omit<
-  RawDraftContentBlock,
-  'type'
-> & {
+export type RawDraftContentBlockWithCustomType<T> = Omit<RawDraftContentBlock, 'type'> & {
   type: T
 }
 
@@ -40,11 +37,12 @@ export interface IConvertToHTMLConfig<
   E extends RawDraftEntity = RawDraftEntity,
 > {
   // Inline styles:
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  styleToHTML?: ((style: S) => Tag | null | undefined | void) | undefined
+  styleToHTML?: ((style: S) => Tag | null | undefined | undefined) | undefined
 
   // Block styles:
-  blockToHTML?: ((block: RawDraftContentBlockWithCustomType<B>) => Tag | null | undefined) | undefined
+  blockToHTML?:
+    | ((block: RawDraftContentBlockWithCustomType<B>) => Tag | null | undefined)
+    | undefined
 
   // Entity styling:
   entityToHTML?: ((entity: E, originalText: string) => Tag | null | undefined) | undefined
@@ -78,7 +76,11 @@ export interface IConvertFromHTMLConfig<
     | ((
         nodeName: string,
         node: ExtendedHTMLElement<S>,
-        createEntity: (type: E['type'], mutability: DraftEntityMutability, data: E['data']) => EntityKey,
+        createEntity: (
+          type: E['type'],
+          mutability: DraftEntityMutability,
+          data: E['data']
+        ) => EntityKey,
         getEntity: (key: EntityKey) => Entity,
         mergeEntityData: (key: string, data: object) => void,
         replaceEntityData: (key: string, data: object) => void
@@ -89,7 +91,11 @@ export interface IConvertFromHTMLConfig<
   textToEntity?:
     | ((
         text: string,
-        createEntity: (type: E['type'], mutability: DraftEntityMutability, data: E['data']) => EntityKey,
+        createEntity: (
+          type: E['type'],
+          mutability: DraftEntityMutability,
+          data: E['data']
+        ) => EntityKey,
         getEntity: (key: EntityKey) => Entity,
         mergeEntityData: (key: string, data: object) => void,
         replaceEntityData: (key: string, data: object) => void

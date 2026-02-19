@@ -1,5 +1,5 @@
+import { convertToRaw, Entity } from 'draft-js'
 import React from 'react'
-import { Entity, convertToRaw } from 'draft-js'
 import convertFromHTML from '../../src/convertFromHTML'
 import convertToHTML from '../../src/convertToHTML'
 
@@ -22,7 +22,7 @@ const getEntityFromContentState = (contentState, entityKey) => {
 describe('convertFromHTML', () => {
   const toContentState = (html, options) =>
     convertFromHTML({
-      htmlToBlock: (nodeName, node, lastList, inBlock) => {
+      htmlToBlock: (nodeName, node, _lastList, inBlock) => {
         if ((nodeName === 'p' || nodeName === 'div') && inBlock === 'blockquote') {
           return 'blockquote'
         }

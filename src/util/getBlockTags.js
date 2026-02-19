@@ -25,16 +25,12 @@ export default function getBlockTags(blockHTML) {
     return splitReactElement(blockHTML)
   }
 
-  if (
-    Object.prototype.hasOwnProperty.call(blockHTML, 'element') &&
-    React.isValidElement(blockHTML.element)
-  ) {
+  if (Object.hasOwn(blockHTML, 'element') && React.isValidElement(blockHTML.element)) {
     return { ...blockHTML, ...splitReactElement(blockHTML.element) }
   }
 
   invariant(
-    Object.prototype.hasOwnProperty.call(blockHTML, 'start') &&
-      Object.prototype.hasOwnProperty.call(blockHTML, 'end'),
+    Object.hasOwn(blockHTML, 'start') && Object.hasOwn(blockHTML, 'end'),
     'convertToHTML: received block information without either a ReactElement or an object with start/end tags'
   )
 

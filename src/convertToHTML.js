@@ -1,20 +1,20 @@
+import DraftJS from 'draft-js'
 import invariant from 'invariant'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import DraftJS from 'draft-js'
-import encodeBlock from './encodeBlock.js'
 import blockEntities from './blockEntities.js'
 import blockInlineStyles from './blockInlineStyles.js'
+import defaultBlockHTML from './default/defaultBlockHTML.js'
+import encodeBlock from './encodeBlock.js'
 import accumulateFunction from './util/accumulateFunction.js'
 import blockTypeObjectFunction from './util/blockTypeObjectFunction.js'
 import getBlockTags from './util/getBlockTags.js'
 import getNestedBlockTags from './util/getNestedBlockTags.js'
-import defaultBlockHTML from './default/defaultBlockHTML.js'
 
 const { convertToRaw } = DraftJS
 
-const defaultEntityToHTML = (entity, originalText) => originalText
-const defaultValidateHTML = (html) => true
+const defaultEntityToHTML = (_entity, originalText) => originalText
+const defaultValidateHTML = (_html) => true
 
 const convertToHTML =
   ({
@@ -99,7 +99,7 @@ const convertToHTML =
           html = blockHTML.start + innerHTML + blockHTML.end
         }
 
-        if (innerHTML.length === 0 && Object.prototype.hasOwnProperty.call(blockHTML, 'empty')) {
+        if (innerHTML.length === 0 && Object.hasOwn(blockHTML, 'empty')) {
           if (React.isValidElement(blockHTML.empty)) {
             html = ReactDOMServer.renderToStaticMarkup(blockHTML.empty)
           } else {
@@ -127,11 +127,7 @@ const convertToHTML =
   }
 
 export default (...args) => {
-  if (
-    args.length === 1 &&
-    Object.prototype.hasOwnProperty.call(args[0], '_map') &&
-    args[0].getBlockMap != null
-  ) {
+  if (args.length === 1 && Object.hasOwn(args[0], '_map') && args[0].getBlockMap != null) {
     // skip higher-order function and use defaults
     return convertToHTML({})(...args)
   }

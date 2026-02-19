@@ -20,18 +20,15 @@ const rewriteSpecifiers = (source) =>
   source
     .replace(
       /(\bfrom\s+['"])(\.\.?\/[^'"]+)(['"])/g,
-      (full, before, specifier, after) =>
-        `${before}${toMjsSpecifier(specifier)}${after}`
+      (_full, before, specifier, after) => `${before}${toMjsSpecifier(specifier)}${after}`
     )
     .replace(
       /(\bimport\s*['"])(\.\.?\/[^'"]+)(['"])/g,
-      (full, before, specifier, after) =>
-        `${before}${toMjsSpecifier(specifier)}${after}`
+      (_full, before, specifier, after) => `${before}${toMjsSpecifier(specifier)}${after}`
     )
     .replace(
       /(\bimport\s*\(\s*['"])(\.\.?\/[^'"]+)(['"]\s*\))/g,
-      (full, before, specifier, after) =>
-        `${before}${toMjsSpecifier(specifier)}${after}`
+      (_full, before, specifier, after) => `${before}${toMjsSpecifier(specifier)}${after}`
     )
 
 const walkFiles = (directory) =>

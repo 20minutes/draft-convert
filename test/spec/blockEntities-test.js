@@ -1,11 +1,17 @@
-import { Map } from 'immutable'
-import React from 'react'
 import { convertFromRaw, convertToRaw } from 'draft-js'
+import Immutable from 'immutable'
+import React from 'react'
 import blockEntities from '../../src/blockEntities'
 import blockInlineStyles from '../../src/blockInlineStyles'
 import encodeBlock from '../../src/encodeBlock'
 
-const buildRawBlock = (text, entityMap = {}, styleRanges = [], entityRanges = [], data = Map()) =>
+const buildRawBlock = (
+  text,
+  entityMap = {},
+  styleRanges = [],
+  entityRanges = [],
+  data = Immutable.Map()
+) =>
   convertToRaw(
     convertFromRaw({
       entityMap,
@@ -532,15 +538,14 @@ describe('blockEntities', () => {
       ]
     )
 
-    const middleware = (next) =>
-      function (entity, originalText) {
-        const { type } = entity
-        if (type === 'test') {
-          return <a />
-        }
-
-        return next(entity, originalText)
+    const middleware = (next) => (entity, originalText) => {
+      const { type } = entity
+      if (type === 'test') {
+        return <a />
       }
+
+      return next(entity, originalText)
+    }
     middleware.__isMiddleware = true
 
     const result = blockInlineStyles(blockEntities(encodeBlock(rawBlock), entityMap, middleware))
@@ -602,7 +607,7 @@ describe('blockEntities', () => {
       },
     ])
 
-    const result = blockEntities(rawBlock, entityMap, (entity, originalText) => {
+    const result = blockEntities(rawBlock, entityMap, (entity, _originalText) => {
       if (entity.type === 'IMAGE') {
         return <img src="test" />
       }

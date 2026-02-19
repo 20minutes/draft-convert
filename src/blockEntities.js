@@ -1,9 +1,9 @@
-import updateMutation from './util/updateMutation.js'
-import rangeSort from './util/rangeSort.js'
 import getElementHTML from './util/getElementHTML.js'
 import getElementTagLength from './util/getElementTagLength.js'
+import rangeSort from './util/rangeSort.js'
+import updateMutation from './util/updateMutation.js'
 
-const converter = (entity = {}, originalText = '') => originalText
+const converter = (_entity = {}, originalText = '') => originalText
 
 export default (block, entityMap, entityConverter = converter) => {
   let resultText = [...block.text]
@@ -14,10 +14,7 @@ export default (block, entityMap, entityConverter = converter) => {
     getEntityHTML = entityConverter(converter)
   }
 
-  if (
-    Object.prototype.hasOwnProperty.call(block, 'entityRanges') &&
-    block.entityRanges.length > 0
-  ) {
+  if (Object.hasOwn(block, 'entityRanges') && block.entityRanges.length > 0) {
     let entities = block.entityRanges.sort(rangeSort)
 
     let styles = block.inlineStyleRanges
@@ -43,7 +40,7 @@ export default (block, entityMap, entityConverter = converter) => {
       const suffixLength = getElementTagLength(entityHTML, 'end')
 
       const updateLaterMutation = (mutation, mutationIndex) => {
-        if (mutationIndex > index || Object.prototype.hasOwnProperty.call(mutation, 'style')) {
+        if (mutationIndex > index || Object.hasOwn(mutation, 'style')) {
           return updateMutation(
             mutation,
             entityRange.offset,

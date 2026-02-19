@@ -21,8 +21,7 @@ export default function getNestedBlockTags(blockHTML, depth) {
   }
 
   invariant(
-    Object.prototype.hasOwnProperty.call(blockHTML, 'nestStart') &&
-      Object.prototype.hasOwnProperty.call(blockHTML, 'nestEnd'),
+    Object.hasOwn(blockHTML, 'nestStart') && Object.hasOwn(blockHTML, 'nestEnd'),
     'convertToHTML: received block information without either a ReactElement or an object with start/end tags'
   )
 
