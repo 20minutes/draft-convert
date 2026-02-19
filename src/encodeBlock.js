@@ -1,5 +1,5 @@
-import updateMutation from './util/updateMutation.js'
 import rangeSort from './util/rangeSort.js'
+import updateMutation from './util/updateMutation.js'
 
 const ENTITY_MAP = {
   '&': '&amp;',

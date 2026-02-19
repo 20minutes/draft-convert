@@ -21,12 +21,7 @@ const runCommand = (command, args, options = {}) => {
       stdio: ['ignore', 'pipe', 'pipe'],
     }).trim()
   } catch (error) {
-    const output = [
-      error.stdout && error.stdout.toString(),
-      error.stderr && error.stderr.toString(),
-    ]
-      .filter(Boolean)
-      .join('\n')
+    const output = [error.stdout?.toString(), error.stderr?.toString()].filter(Boolean).join('\n')
     throw new Error(`${command} ${args.join(' ')} failed:\n${output}`)
   }
 }

@@ -1,5 +1,5 @@
-import React from 'react'
 import { convertFromRaw, convertToRaw } from 'draft-js'
+import React from 'react'
 import blockInlineStyles from '../../src/blockInlineStyles'
 
 const buildRawBlock = (text, styleRanges) =>
@@ -118,12 +118,11 @@ describe('blockInlineStyles', () => {
         length: 2,
       },
     ])
-    const middleware = (next) =>
-      function (style) {
-        if (style === 'CUSTOM') {
-          return <span />
-        }
+    const middleware = (_next) => (style) => {
+      if (style === 'CUSTOM') {
+        return <span />
       }
+    }
     middleware.__isMiddleware = true
     const result = blockInlineStyles(contentState, middleware)
     expect(result).toBe('12<span>34</span>5')

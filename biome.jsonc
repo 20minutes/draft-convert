@@ -1,0 +1,11 @@
+{
+  "extends": ["@20minutes/eslint-config/biome"],
+  "javascript": {
+    "jsxRuntime": "reactClassic"
+  },
+  "linter": {
+    "rules": {
+      "a11y": "off"
+    }
+  }
+}

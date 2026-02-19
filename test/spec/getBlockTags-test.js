@@ -20,7 +20,7 @@ describe('getBlockTags', () => {
     expect(getBlockTags(block)).toEqual(result)
   })
 
-  it.only('accepts an empty react element with an empty option', () => {
+  it('accepts an empty react element with an empty option', () => {
     const block = {
       element: <p />,
       empty: <br />,

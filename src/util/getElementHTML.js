@@ -33,8 +33,7 @@ export default function getElementHTML(element, text = null) {
   }
 
   invariant(
-    Object.prototype.hasOwnProperty.call(element, 'start') &&
-      Object.prototype.hasOwnProperty.call(element, 'end'),
+    Object.hasOwn(element, 'start') && Object.hasOwn(element, 'end'),
     'convertToHTML: received conversion data without either an HTML string, ReactElement or an object with start/end tags'
   )
 

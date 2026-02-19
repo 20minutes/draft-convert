@@ -1,5 +1,5 @@
-import React from 'react'
 import { convertFromRaw } from 'draft-js'
+import React from 'react'
 import convertToHTML from '../../src/convertToHTML'
 import uniqueId from '../util/uniqueId'
 
@@ -837,15 +837,14 @@ describe('convertToHTML', () => {
       },
     ])
 
-    const blockToHTML = (next) =>
-      function (block) {
-        const { type } = block
-        if (type === 'unstyled') {
-          return <testelement />
-        }
-
-        return next(block)
+    const blockToHTML = (next) => (block) => {
+      const { type } = block
+      if (type === 'unstyled') {
+        return <testelement />
       }
+
+      return next(block)
+    }
 
     blockToHTML.__isMiddleware = true
 
@@ -903,7 +902,7 @@ describe('convertToHTML', () => {
     )
 
     const result = convertToHTML({
-      entityToHTML(entity, originalText) {
+      entityToHTML(entity, _originalText) {
         if (entity.type === 'emoji') {
           return entity.data.emojiUnicode
         }
@@ -1129,7 +1128,7 @@ describe('convertToHTML', () => {
 
         return originalText
       },
-      validateHTML: (html) => false,
+      validateHTML: (_html) => false,
     })(contentState)
     expect(result).toBe('')
   })
