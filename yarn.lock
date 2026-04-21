@@ -3,9 +3,9 @@
 
 
 "@20minutes/eslint-config@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@20minutes/eslint-config/-/eslint-config-3.0.0.tgz#daf43cd1d8c67dcf7f639bfba6094e8e17bf939f"
-  integrity sha512-43jA65xFKYCfUnelLAeGJ3hmXKD2VDQxgjWfSd6aCAyxy2PkISnUAJiawvW9mJ0Mz2fxatUv8ZndSh74GAC5Tw==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@20minutes/eslint-config/-/eslint-config-3.0.2.tgz#3f2a98409020fbaa113cd5418a8779c718f7bfb2"
+  integrity sha512-Xr6uTW92WkHwGUeyUzO2og7U8ZQRVgXU+eGqkNsBl5IbmTOWur7M1uB3/XL1kSs0V0c9d+NbSinx+++I3GXleg==
   dependencies:
     "@biomejs/biome" "^2.4.2"
 
