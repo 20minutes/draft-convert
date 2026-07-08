@@ -1,4 +1,4 @@
-import invariant from 'invariant'
+import invariant from 'tiny-invariant'
 import defaultInlineHTML from './default/defaultInlineHTML.js'
 import accumulateFunction from './util/accumulateFunction.js'
 import getElementHTML from './util/getElementHTML.js'
