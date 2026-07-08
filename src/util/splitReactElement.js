@@ -1,6 +1,6 @@
-import invariant from 'invariant'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import invariant from 'tiny-invariant'
 
 // see http://w3c.github.io/html/syntax.html#writing-html-documents-elements
 const VOID_TAGS = [

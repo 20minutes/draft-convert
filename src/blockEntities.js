@@ -30,7 +30,7 @@ export default (block, entityMap, entityConverter = converter) => {
       const entityHTML = getEntityHTML(entity, originalText)
       const elementHTML = getElementHTML(entityHTML, originalText)
       let converted
-      if (!!elementHTML || elementHTML === '') {
+      if (elementHTML || elementHTML === '') {
         converted = [...elementHTML]
       } else {
         converted = originalText

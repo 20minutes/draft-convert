@@ -31,6 +31,9 @@ jobs:
       - name: build
         run: yarn build
 
+      - name: check package
+        run: yarn check:package
+
       - name: lint
         run: yarn lint
 

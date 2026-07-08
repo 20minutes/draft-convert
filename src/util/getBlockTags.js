@@ -1,6 +1,6 @@
-import invariant from 'invariant'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import invariant from 'tiny-invariant'
 import splitReactElement from './splitReactElement.js'
 
 function hasChildren(element) {
