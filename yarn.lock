@@ -1135,9 +1135,9 @@
     "@sinonjs/commons" "^3.0.1"
 
 "@swc/cli@^0.8.0":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@swc/cli/-/cli-0.8.1.tgz#454e854086213bc047b89a96f059d6d3be494681"
-  integrity sha512-L+ACCGHCiS0VqHVep/INLVnvRvJ2XooQFLZq4L8snhxw1jsqz+XRcY313UsyPVturPPE1shW3jic7rt3qEQTSQ==
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@swc/cli/-/cli-0.8.2.tgz#59ebc58b1371db7eda6a895e9152009e85c095eb"
+  integrity sha512-4RAfbHx1oz/9zFutxIjm7famgfQeQ6s3Tc5rIWxXfB+QlA5y5rHKFi8NDCZ5iqZuZkMZTzMAHoWRRlioLO5i7Q==
   dependencies:
     "@swc/counter" "^0.1.3"
     "@xhmikosr/bin-wrapper" "^14.0.0"
@@ -1148,6 +1148,7 @@
     slash "3.0.0"
     source-map "^0.7.3"
     tinyglobby "^0.2.13"
+    write-file-atomic "^7.0.1"
 
 "@swc/core-darwin-arm64@1.16.20":
   version "1.16.20"
@@ -4098,6 +4099,13 @@ write-file-atomic@^5.0.1:
   integrity sha512-+QU2zd6OTD8XWIJCbffaiQeH9U73qIqafo1x6V1snCWYGJf6cVE0cDR4D8xRzcEnfI21IFrUPzPGtcPf8AC+Rw==
   dependencies:
     imurmurhash "^0.1.4"
+    signal-exit "^4.0.1"
+
+write-file-atomic@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/write-file-atomic/-/write-file-atomic-7.0.1.tgz#0e2a450ab5aa306bcfcd3aed61833b10cc4fb885"
+  integrity sha512-OTIk8iR8/aCRWBqvxrzxR0hgxWpnYBblY1S5hDWBQfk/VFmJwzmJgQFN3WsoUKHISv2eAwe+PpbUzyL1CKTLXg==
+  dependencies:
     signal-exit "^4.0.1"
 
 ws@^8.18.0:
